@@ -19,9 +19,9 @@ const app = express();
 
 /* ========================  CORS CONFIG  ======================== */
 app.use(cors({
-  origin: process.env.FRONTEND_URL, // e.g., http://127.0.0.1:5500
-  credentials: true
+  origin: ['http://127.0.0.1:5500', 'https://seacalm.netlify.app']
 }));
+
 
 
 /* ========================  MIDDLEWARE  ======================== */
