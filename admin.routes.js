@@ -203,5 +203,34 @@ router.get('/moods/:ship', async (req, res) => {
     res.status(500).json({ message: "Internal server error" });
   }
 });
+// Approve or deny crew member (POST /api/admin/approve/:id)
+router.post('/approve/:id', async (req, res) => {
+  try {
+    const { approve } = req.body; // expects { approve: true/false }
+    const user = await User.findById(req.params.id);
+    if (!user) return res.status(404).json({ message: 'User not found' });
+
+    user.isApproved = !!approve;
+    await user.save();
+
+    res.json({ message: approve ? 'User approved.' : 'User denied.' });
+  } catch (err) {
+    console.error('❌ Approve user error:', err);
+    res.status(500).json({ message: 'Internal server error' });
+  }
+});
+
+// Delete crew member (DELETE /api/admin/users/:id)
+router.delete('/users/:id', async (req, res) => {
+  try {
+    const deletedUser = await User.findByIdAndDelete(req.params.id);
+    if (!deletedUser) return res.status(404).json({ message: 'User not found' });
+
+    res.json({ message: 'User deleted successfully.' });
+  } catch (err) {
+    console.error('❌ Delete user error:', err);
+    res.status(500).json({ message: 'Internal server error' });
+  }
+});
 
 module.exports = router;
